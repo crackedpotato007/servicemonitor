@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-prisma.$connect();
 import * as config from "../config.json";
 import * as nodemailer from "nodemailer";
 var transporter = nodemailer.createTransport({
@@ -11,6 +10,7 @@ var transporter = nodemailer.createTransport({
   },
 });
 async function check() {
+  await prisma.$connect();
   const data = await prisma.pings.findMany();
   data.forEach(async (ping) => {
     const configData = config.checks.find((x) => (x.uuid = ping.uuid));

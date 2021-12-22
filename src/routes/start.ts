@@ -6,7 +6,7 @@ export default {
   route: "/start/:id",
   function: async function (req: Request, res: Response) {
     if (config.checks.some((x) => x.uuid === req.params.id)) {
-      prisma.$connect();
+      await prisma.$connect();
       const data = await prisma.pings.findUnique({
         where: {
           uuid: req.params.id,
@@ -26,6 +26,7 @@ export default {
           },
         });
         res.status(200);
+        await prisma.$disconnect();
         return res.send("Service started!");
       }
     }
