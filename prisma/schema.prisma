@@ -1,0 +1,17 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model pings {
+  id       String  @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  active   Boolean
+  lastPing BigInt
+  tripped  Boolean
+  uuid     String @unique
+}

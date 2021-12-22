@@ -1,0 +1,14 @@
+{
+  "checks": [
+    {
+      "name": "Temp Check",
+      "uuid": "513fwemhteoeeer",
+      "grace": 1.5
+    }
+  ],
+  "auth": {
+    "user": "",
+    "pass": ""
+  },
+  "mailto": ""
+}
