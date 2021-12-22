@@ -7,7 +7,7 @@ app.listen(process.env.PORT ? process.env.port : "1331", () =>
   console.log("Listening!")
 );
 
-readdirSync("./src/routes").map(async (route) => {
+readdirSync(`${__dirname}/routes`).map(async (route) => {
   console.log(`Registering ${route}`);
   router.get(
     (await import(`./routes/${route}`)).default.route,

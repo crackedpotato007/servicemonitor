@@ -37,7 +37,7 @@ const check_pings_1 = __importDefault(require("./check-pings"));
 const app = express.default();
 const router = express.default.Router();
 app.listen(process.env.PORT ? process.env.port : "1331", () => console.log("Listening!"));
-(0, fs_1.readdirSync)("./src/routes").map((route) => __awaiter(void 0, void 0, void 0, function* () {
+(0, fs_1.readdirSync)(`${__dirname}/routes`).map((route) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Registering ${route}`);
     router.get((yield Promise.resolve().then(() => __importStar(require(`./routes/${route}`)))).default.route, (yield Promise.resolve().then(() => __importStar(require(`./routes/${route}`)))).default.function);
 }));
