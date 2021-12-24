@@ -1,20 +1,22 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { Request, Response } from "express";
-import * as config from "../../config.json";
 export default {
   route: "/start/:id",
   function: async function (req: Request, res: Response) {
-    if (config.checks.some((x) => x.uuid === req.params.id)) {
-      await prisma.$connect();
-      const data = await prisma.pings.findUnique({
-        where: {
-          uuid: req.params.id,
-        },
-      });
-      if (!data) return res.send("Send the first ping first!");
+    await prisma.$connect();
+    const data = await prisma.pings.findUnique({
+      where: { uuid: req.params.id },
+    });
+    if (!data) {
+      res.status(404);
+      return res.send(
+        "Invalid UUID or the api hasn't been pinged a single time!"
+      );
+    }
+    if (data) {
       if (data.active) {
-        res.status(400);
+        res.status(404);
         res.send("The service is already active!");
       } else {
         await prisma.pings.update({

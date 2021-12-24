@@ -1,0 +1,185 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "ServiceMonitor",
+    "description": "Get notified by email whena service of yours goes down!",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:1331",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Monitoring",
+      "description": "API for monitoring services"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "definitions": {
+    "email": {
+      "required": ["message"],
+      "properties": {
+        "message": {
+          "type": "string",
+          "value": "The string specified as email is not a valid email!"
+        }
+      }
+    },
+    "Ping": {
+      "required": ["message"],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "missing": {
+      "required": ["message"],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/ping/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the service",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Ping"],
+        "summary": "Ping the api from your service",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Ping"
+            }
+          },
+          "404": {
+            "description": "Invalid UUID",
+            "schema": {
+              "$ref": "#/definitions/UUID"
+            }
+          }
+        }
+      }
+    },
+    "/register/": {
+      "parameters": [
+        {
+          "name": "grace",
+          "type": "string",
+          "in": "query",
+          "description": "The amount of time in minutes after which you will get notified if the service doesn't ping us back"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "in": "query",
+          "description": "The email you will get notified on if your service goes down!"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "in": "query",
+          "description": "The name of your service!"
+        }
+      ],
+      "get": {
+        "tags": ["register"],
+        "summary": "Register a new service!",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Ping"
+            }
+          },
+          "404": {
+            "description": "Missing parameters",
+            "schema": {
+              "$ref": "#/definitions/missing"
+            }
+          },
+          "400": {
+            "description": "Invalid type of data specified",
+            "schema": {
+              "$ref": "#/definitions/email"
+            }
+          }
+        }
+      }
+    },
+    "/start/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "in": "path",
+          "description": "ID of the service"
+        }
+      ],
+      "get": {
+        "tags": ["Start"],
+        "summary": "Notify the api that your application has been started",
+        "responses": {
+          "404": {
+            "description": "Invalid UUID",
+            "schema": {
+              "$ref": "#/definitions/missing"
+            }
+          },
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Ping"
+            }
+          }
+        }
+      }
+    },
+    "/stop/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "in": "path",
+          "description": "ID of the service"
+        }
+      ],
+      "get": {
+        "tags": ["Stop"],
+        "summary": "Notify the api that your application has been stopped for management",
+        "responses": {
+          "404": {
+            "description": "Invalid UUID",
+            "schema": {
+              "$ref": "#/definitions/missing"
+            }
+          },
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Ping"
+            }
+          }
+        }
+      }
+    }
+  }
+}

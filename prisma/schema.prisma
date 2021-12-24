@@ -14,4 +14,7 @@ model pings {
   lastPing BigInt
   tripped  Boolean
   uuid     String @unique
+  name     String
+  grace    Int
+  email    String
 }

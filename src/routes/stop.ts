@@ -1,11 +1,14 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { Request, Response } from "express";
-import * as config from "../../config.json";
 export default {
   route: "/stop/:id",
   function: async function (req: Request, res: Response) {
-    if (config.checks.some((x) => x.uuid === req.params.id)) {
+    await prisma.$connect();
+    const data = await prisma.pings.findUnique({
+      where: { uuid: req.params.id },
+    });
+    if (data) {
       await prisma.$connect();
       const data = await prisma.pings.findUnique({
         where: {
